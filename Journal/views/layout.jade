@@ -9,6 +9,8 @@ html
       .navbar-inner
         .container
           a.brand(href='/') Poet Demos
+          if(user)
+              p(style="float:right;color:#fff")= user.username
     .wrap
       .container
         .row
