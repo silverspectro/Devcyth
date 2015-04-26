@@ -6,4 +6,17 @@ block content
   - each post in posts
     include includes/postSnippet
 
+  script(src="/socket.io/socket.io.js")
+  if(user)
+    script(type="text/javascript").
+      var socket = io();
+      owner = "#{user.username}"
+
+      console.log(owner);
+      
+      socket.on("refresh", function(){
+        window.location.reload();
+      });
+
+
   include includes/pagination
