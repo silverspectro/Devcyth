@@ -77,6 +77,16 @@ function onError(error) {
   }
 }
 
+io.on('connection', function(socket){
+  console.log('a user connected');
+
+  socket.on("save", function(desc, file){
+    api.writePost(desc, file);
+    //socket.emit("refresh");
+  });
+
+});
+
 /**
  * Event listener for HTTP server "listening" event.
  */

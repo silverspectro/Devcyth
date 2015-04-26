@@ -88,6 +88,7 @@ app.set("api", api);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.engine("html", require("jade").renderFile);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -107,12 +108,15 @@ app.use(passport.session());
 app.use(function(req,res,next){
   api.start();
   res.locals.items = api.items;
-  //api.deleteItem("posts", 1);
-  //api.modifyItem("posts", 1, {Title: "test", lol : "resteste"});
+
   next();
 });
 
 app.use('/', routes);
+
+app.get("/editor", ensureAuthenticated, function(req, res, next){
+  res.render("editor", { user: req.user });
+});
 
 app.get('/admin', ensureAuthenticated, function(req, res){
   res.render('index', { user: req.user });

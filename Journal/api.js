@@ -86,6 +86,14 @@ API.prototype.writeFile = function(type, items) {
   })
 }
 
+API.prototype.writePost = function(desc, file) {
+  var postsFile = __dirname + "/_posts/" + desc.title + ".md";
+  console.log(desc);
+  fs.writeFile(postsFile, "{{" + JSON.stringify(desc) + "}}" + "\n" + file, "utf8", function(err){
+    if(err)throw err;
+  });
+}
+
 API.prototype.addItem = function(item) {
   var data = new Item(item);
   var items = this.items;
