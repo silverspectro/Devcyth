@@ -170,44 +170,9 @@
   </div>
   <div id="in">
     <form>
-      <textarea id="code"># (GitHub-Flavored) Markdown Editor
+      <textarea id="code">
 
-Basic useful feature list:
-
- * Ctrl/Cmd + S to save the file
- * Drag and drop a file into here to load it
- * File contents are saved in the URL so you can share files
-
-
-I'm no good at writing sample / filler text, so go write something yourself.
-
-Look, a list!
-
- * foo
- * bar
- * baz
-
-And here's some code! :+1:
-
-```javascript
-$(function(){
-  $('div').html('I am a div.');
-});
-```
-
-This is [on GitHub](https://github.com/jbt/markdown-editor) so let me know if I've b0rked it somewhere.
-
-
-Props to Mr. Doob and his [code editor](http://mrdoob.com/projects/code-editor/), from which
-the inspiration to this, and some handy implementation hints, came.
-
-### Stuff used to make this:
-
- * [markdown-it](https://github.com/markdown-it/markdown-it) for Markdown parsing
- * [CodeMirror](http://codemirror.net/) for the awesome syntax-highlighted editor
- * [highlight.js](http://softwaremaniacs.org/soft/highlight/en/) for syntax highlighting in output code blocks
- * [js-deflate](https://github.com/dankogai/js-deflate) for gzipping of data to make it fit in URLs
-</textarea></form></div>
+      </textarea></form></div>
   <div id="out"></div>
   <ul id="menu">
     <h3>Save as</h3>
@@ -230,6 +195,22 @@ the inspiration to this, and some handy implementation hints, came.
     emojify.setConfig({
       img_dir: 'emoji'
     });
+
+    function getFormattedDate() {
+      var today = new Date();
+     var dd = today.getDate();
+     var mm = today.getMonth()+1; //January is 0!
+
+     var yyyy = today.getFullYear();
+     if(dd<10){
+         dd='0'+dd
+     }
+     if(mm<10){
+         mm='0'+mm
+     }
+     var today = dd+'-'+mm+'-'+yyyy;
+     return today;
+    }
 
     var md = markdownit({
       highlight: function(code, lang){
@@ -306,17 +287,21 @@ the inspiration to this, and some handy implementation hints, came.
       var tr = document.getElementById("title").value,
           tg = document.getElementById("tags").value;
 
-      console.log(tr, tg);
 
       var desc = {
         title: tr,
         tags: tg.split(','),
         category: tags[0],
-        date: "4-26-2015"
+        date: getFormattedDate()
       };
-      //var blob = new Blob([code], { type: 'text/plain' });
-      socket.emit("save", desc, editor.getValue());
-      //saveBlob(blob, "untitled.md");
+
+      var blob = new Blob([code], { type: 'text/plain' });
+      if(desc.title && desc.tags) {
+        socket.emit("save", desc, editor.getValue());
+        saveBlob(blob, "untitled.md");
+      } else {
+        alert("No content to save");
+      }
     }
 
     document.getElementById('saveas-markdown').addEventListener('click', function() {
@@ -354,13 +339,16 @@ the inspiration to this, and some handy implementation hints, came.
     }
 
     function showMenu() {
-      document.getElementById('menu').style.display = 'block';
+      if(document.getElementById('menu').style.display == "block") {
+        hideMenu();
+      } else {
+        document.getElementById('menu').style.display = 'block';
+      }
     }
-
+    hideMenu();
     function hideMenu() {
       document.getElementById('menu').style.display = 'none';
     }
-    hideMenu();
 
     document.addEventListener('keydown', function(e){
       if(e.keyCode == 83 && (e.ctrlKey || e.metaKey)){
