@@ -1,11 +1,17 @@
 div.post
-  h1
-    a(href=post.url)
-      = post.title
+  div.close-post
+    p X
+  h3
+   = post.title
   span.date #{post.date.getMonth()+1}.#{post.date.getDate()}.#{post.date.getFullYear()}
-  div.post.content
-    != post.preview
-  div.tags
+  ul.tags
     - each tag in post.tags
-      a(href=tagUrl(tag))
-        span.label.label-info #{tag}
+      li
+        a(href=tagUrl(tag))
+          = tag
+  blockquote
+    = post.description
+  .preview
+    != post.preview
+  .content
+    != post.content

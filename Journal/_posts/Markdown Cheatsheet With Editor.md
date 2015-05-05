@@ -1,11 +1,11 @@
-{{{"title":"Markdown Cheatsheet With Editor","tags":["cheatsheet"],"date":"4-26-2015"}}}
+{{{"title":"Markdown Cheatsheet With Editor","description":"test description","tags":["cheatsheet"],"date":"4-26-2015"}}}
 # Titre de Niveau 1
 ## Titre de Niveau 2
 ### Titre de niveau 3
 
 > Blockquote
 
-Paragaraphe normal 
+Paragaraphe normal
 
 [lien](http://www.google.com)
 

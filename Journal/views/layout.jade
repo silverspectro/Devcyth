@@ -1,33 +1,38 @@
 doctype html
 html
   head
-    title= 'Poet Demo'
+    title= 'Journal'
     meta(charset='utf-8')
-    link(rel='stylesheet', href='/css/bootstrap.css')
+    meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+    meta(name="description", content="")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    link(rel='stylesheet',type="text/css", href="/css/font-awesome.min.css")
+    link(rel='stylesheet',type="text/css", href="http://fonts.googleapis.com/css?family=IM+Fell+English:400italic,400|Lato:400,700,300,900")
+    link(rel='stylesheet',type="text/css", href="/css/journalview.css")
   body
     .navbar.navbar-fixed-top
       .navbar-inner
         .container
-          a.brand(href='/') Poet Demos
+          a.brand(href='/') Journal
           if(user)
               p(style="float:right;color:#fff")= user.username
               a(href="/editor", style="float:right") editor
               a(href="/logout", style="float:right") logout
           else
            a(href="/login", style="float:right") login
-    .wrap
-      .container
-        .row
-          .span8
-            block content
-          .span4
-            .well.sidebar-nav
-              ul.nav.nav-list
-                li.nav-header categories
-                - each cat in getCategories()
-                  li
-                    a(href=categoryURL(cat)) #{cat}
-                li.nav-header tags
-                - each tag in getTags()
-                  li
-                    a(href=tagURL(tag)) #{tag}
+    .container
+      .well.sidebar-nav
+        ul.nav.nav-list
+          li.nav-header categories
+          - each cat in getCategories()
+            li
+              a(href=categoryURL(cat)) #{cat}
+          li.nav-header tags
+          - each tag in getTags()
+            li
+              a(href=tagURL(tag)) #{tag}
+    #wrapper
+      block content
+
+    script(type="text/javascript", src="/socket.io/socket.io.js")
+    script(type="text/javascript", src="/javascript/UI.js")

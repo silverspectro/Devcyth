@@ -85,6 +85,11 @@ io.on('connection', function(socket){
     //socket.emit("refresh");
   });
 
+  socket.on("get", function(item, attribute){
+    console.log(api.get(item, attribute));
+    //socket.emit("refresh");
+  });
+
 });
 
 /**

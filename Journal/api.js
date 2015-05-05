@@ -86,6 +86,11 @@ API.prototype.writeFile = function(type, items) {
   })
 }
 
+API.prototype.get = function(item, attribute) {
+  items = this.items;
+  return items[item][attribute];
+}
+
 API.prototype.writePost = function(desc, file) {
   var postsFile = __dirname + "/_posts/" + desc.title + ".md";
   console.log(desc);
