@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>EpicEditor - An embeddable JavaScript Markdown editor</title>
+    <meta name="description" content="EpicEditor is an embeddable JavaScript Markdown editor with split fullscreen editing, live previewing, automatic draft saving, offline support, and more.">
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic|Arvo:400,400italic' rel='stylesheet' type='text/css'>
+
+  </head>
+  <body>
+    <div id="epiceditor"></div>
+    <div id="epicecitor-preview"></div>
+    <textarea style="display:none;" id="result"></textarea>
+  <script src="epiceditor/prettify.js"></script>
+  <script src="epiceditor/epiceditor.js"></script>
+  <script>
+  var opts = {
+  container: 'epiceditor',
+  textarea:'result',
+  basePath: 'epiceditor',
+  clientSideStorage: true,
+  localStorageName: 'epiceditor',
+  useNativeFullscreen: false,
+  parser: marked,
+  file: {
+    name: 'epiceditor',
+    defaultContent: '',
+    autoSave: 100
+  },
+  theme: {
+    base: '/themes/base/epiceditor.css',
+    preview: '/themes/preview/preview-dark.css',
+    editor: '/themes/editor/epic-dark.css'
+  },
+  button: {
+    preview: true,
+    fullscreen: true,
+    bar: "auto"
+  },
+  focusOnLoad: false,
+  shortcut: {
+    modifier: 18,
+    fullscreen: 70,
+    preview: 80
+  },
+  string: {
+    togglePreview: 'Toggle Preview Mode',
+    toggleEdit: 'Toggle Edit Mode',
+    toggleFullscreen: 'Enter Fullscreen'
+  },
+  autogrow: false
+}
+var editor = new EpicEditor(opts).load();
+editor.on("load", editor.enterFullscreen());
+  </script>
+</body>
+</html>
