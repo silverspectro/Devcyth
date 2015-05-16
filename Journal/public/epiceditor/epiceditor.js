@@ -120,7 +120,7 @@
     id = id || '';
     var headID = context.getElementsByTagName("head")[0]
       , cssNode = context.createElement('link');
-    
+
     _applyAttrs(cssNode, {
       type: 'text/css'
     , id: id
@@ -170,7 +170,7 @@
     content = content.replace(/</g, '&lt;');
     content = content.replace(/>/g, '&gt;');
     content = content.replace(/\n/g, '<br>');
-    
+
     // Make sure to there aren't two spaces in a row (replace one with &nbsp;)
     // If you find and replace every space with a &nbsp; text will not wrap.
     // Hence the name (Non-Breaking-SPace).
@@ -362,7 +362,7 @@
         };
 
     self.settings = _mergeObjs(true, defaults, opts);
-    
+
     var buttons = self.settings.button;
     self._fullscreenEnabled = typeof(buttons) === 'object' ? typeof buttons.fullscreen === 'undefined' || buttons.fullscreen : buttons === true;
     self._editEnabled = typeof(buttons) === 'object' ? typeof buttons.edit === 'undefined' || buttons.edit : buttons === true;
@@ -417,7 +417,7 @@
         });
       }
     }
-    
+
     // Figure out the file name. If no file name is given we'll use the ID.
     // If there's no ID either we'll use a namespaced file name that's incremented
     // based on the calling order. As long as it doesn't change, drafts will be saved.
@@ -570,7 +570,7 @@
                     (self._fullscreenEnabled ? '<button title="' + this.settings.string.toggleFullscreen + '" class="epiceditor-fullscreen-btn"></button>' : '') +
                   '</div>' +
                 '</div>'
-    
+
     // The previewer is just an empty box for the generated HTML to go into
     , previewer: '<div id="epiceditor-preview"></div>'
     , editor: '<!doctype HTML>'
@@ -583,8 +583,8 @@
       frameborder: 0,
       id: self._instanceId
     });
-    
-    
+
+
     self.element.appendChild(iframeElement);
 
     // Because browsers add things like invisible padding and margins and stuff
@@ -592,7 +592,7 @@
     // doesn't keep increasing (by 2px?) every time reflow() is called.
     // FIXME: Figure out how to fix this without setting this
     self.element.style.height = self.element.offsetHeight + 'px';
-    
+
     // Store a reference to the iframeElement itself
     self.iframeElement = iframeElement;
 
@@ -612,7 +612,7 @@
     // Need something for... you guessed it, Firefox
     self.editorIframeDocument.write(_HtmlTemplates.editor);
     self.editorIframeDocument.close();
-    
+
     // Setup the previewer iframe
     self.previewerIframeDocument = _getIframeInnards(self.previewerIframe);
     self.previewerIframeDocument.open();
@@ -629,10 +629,10 @@
 
     // Insert Base Stylesheet
     _insertCSSLink(self.settings.theme.base, self.iframe, 'theme');
-    
+
     // Insert Editor Stylesheet
     _insertCSSLink(self.settings.theme.editor, self.editorIframeDocument, 'theme');
-    
+
     // Insert Previewer Stylesheet
     _insertCSSLink(self.settings.theme.preview, self.previewerIframeDocument, 'theme');
 
@@ -646,9 +646,9 @@
     // Now grab the editor and previewer for later use
     self.editor = self.editorIframeDocument.body;
     self.previewer = self.previewerIframeDocument.getElementById('epiceditor-preview');
-   
+
     self.editor.contentEditable = true;
- 
+
     // Firefox's <body> gets all fucked up so, to be sure, we need to hardcode it
     self.iframe.body.style.height = this.element.offsetHeight + 'px';
 
@@ -780,7 +780,7 @@
         // Setup the containing element CSS for fullscreen
         _elementStates.element = _saveStyleState(self.element, 'save', {
           'position': 'fixed'
-        , 'top': '0'
+        , 'top': '85'
         , 'left': '0'
         , 'width': '100%'
         , 'z-index': '9999' // Most browsers
@@ -879,7 +879,7 @@
         }
       }, 250);
     });
-    
+
     fsElement = self.iframeElement;
 
     // Sets up the onclick event on utility buttons
@@ -956,7 +956,7 @@
       }
       mousePos = { y: e.pageY, x: e.pageX };
     }
- 
+
     // Add keyboard shortcuts for convenience.
     function shortcutHandler(e) {
       if (e.keyCode == self.settings.shortcut.modifier) { isMod = true } // check for modifier press(default is alt key), save to var
@@ -1004,7 +1004,7 @@
       }
 
     }
-    
+
     function shortcutUpHandler(e) {
       if (e.keyCode == self.settings.shortcut.modifier) { isMod = false }
       if (e.keyCode == 17) { isCtrl = false }
@@ -1035,7 +1035,7 @@
 
     // Hide and show the util bar based on mouse movements
     eventableIframes = [self.previewerIframeDocument, self.editorIframeDocument];
-    
+
     for (i = 0; i < eventableIframes.length; i++) {
       eventableIframes[i].addEventListener('mousemove', function (e) {
         utilBarHandler(e);
@@ -1127,7 +1127,7 @@
       ['keydown', 'keyup', 'paste', 'cut'].forEach(function (ev) {
         self.getElement('editor').addEventListener(ev, boundAutogrow);
       });
-      
+
       self.on('__update', boundAutogrow);
       self.on('edit', function () {
         setTimeout(boundAutogrow, 50)
@@ -1626,7 +1626,7 @@
     content = content || '';
     kind = kind || 'md';
     meta = meta || {};
-  
+
     // Set our current file to the new file and update the content
     self.settings.file.name = name;
     _setText(self.editor, content);
@@ -1680,7 +1680,7 @@
 
     name = name || self.settings.file.name;
     kind = kind || 'text';
-   
+
     file = self._getFileStore(name, _isPreviewDraft);
 
     // If the file doesn't exist just return early with undefined
@@ -1689,7 +1689,7 @@
     }
 
     content = file.content;
-   
+
     switch (kind) {
     case 'html':
       content = _sanitizeRawContent(content);
@@ -1715,7 +1715,7 @@
   EpicEditor.prototype.getFiles = function (name, excludeContent) {
     var file
       , data = this._getFileStore(name);
-    
+
     if (name) {
       if (data !== undefined) {
         if (excludeContent) {
