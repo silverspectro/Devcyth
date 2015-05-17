@@ -6,10 +6,22 @@
 header {
   position: relative;
   width: 100%;
-  height: 67px;
+  height: 114px;
 }
 
 textarea#title {
+  display:inline-block;
+  width: 60%;
+  height: 32px;
+  padding: 0.6em 0 0 0.3em;
+  resize: none;
+  height: auto;
+  border: none;
+  background-color: lightgrey;
+  color: #333333;
+}
+
+textarea#description {
   display:inline-block;
   width: 60%;
   height: 32px;

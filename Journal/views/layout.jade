@@ -10,27 +10,24 @@ html
     link(rel='stylesheet',type="text/css", href="http://fonts.googleapis.com/css?family=IM+Fell+English:400italic,400|Lato:400,700,300,900")
     link(rel='stylesheet',type="text/css", href="/css/journalview.css")
   body
-    .navbar.navbar-fixed-top
-      .navbar-inner
-        .container
-          a.brand(href='/') Journal
-          if(user)
-              p(style="float:right;color:#fff")= user.username
-              a(href="/editor", style="float:right") editor
-              a(href="/logout", style="float:right") logout
-          else
-           a(href="/login", style="float:right") login
     .container
-      .well.sidebar-nav
-        ul.nav.nav-list
-          li.nav-header categories
-          - each cat in getCategories()
-            li
-              a(href=categoryURL(cat)) #{cat}
-          li.nav-header tags
-          - each tag in getTags()
-            li
-              a(href=tagURL(tag)) #{tag}
+      a.brand(href='/') Journal
+      if(user)
+          p(style="float:right;color:#fff")= user.username
+          a(href="/editor", style="float:right") editor
+          a(href="/logout", style="float:right") logout
+      else
+       a(href="/login", style="float:right") login
+    .cat-nav
+      ul.nav.nav-list
+        li.nav-header categories
+        - each cat in getCategories()
+          li
+            a(href=categoryURL(cat)) #{cat}
+        li.nav-header tags
+        - each tag in getTags()
+          li
+            a(href=tagURL(tag)) #{tag}
     #wrapper
       block content
 

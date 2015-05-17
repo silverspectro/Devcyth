@@ -3,13 +3,12 @@
   <head>
     <title>EpicEditor - An embeddable JavaScript Markdown editor</title>
     <meta name="description" content="EpicEditor is an embeddable JavaScript Markdown editor with split fullscreen editing, live previewing, automatic draft saving, offline support, and more.">
-    <link href="css/editor.css" rel="stylesheet" type="text/css">
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic|Arvo:400,400italic' rel='stylesheet' type='text/css'>
 
   </head>
   <body>
     <header>
       <textarea id="title" placeholder="Title"></textarea>
+      <textarea id="description" placeholder="description"></textarea>
       <textarea id="tags" placeholder="tag1,tag2"></textarea>
       <div id="function-btn">
         <button id="save">Save</button>
@@ -21,9 +20,8 @@
   <script src="epiceditor/prettify.js"></script>
   <script src="epiceditor/epiceditor.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="javascript/UI.js"></script>
   <script>
-  var socket = io();
-
   var opts = {
   container: 'epiceditor',
   textarea:'result',
@@ -59,59 +57,12 @@
     toggleFullscreen: 'Enter Fullscreen'
   },
   autogrow: false
-}
-var editor = new EpicEditor(opts).load();
-editor.on("load", editor.enterFullscreen());
-editor.on("load", checkFile);
-
-function checkFile(){
-  var files = editor.getFiles();
-  for (x in files) {
-    console.log('File: ' + x); //Returns the name of each file
-  };
-}
-
-function getFormattedDate() {
-  var today = new Date();
- var dd = today.getDate();
- var mm = today.getMonth()+1; //January is 0!
-
- var yyyy = today.getFullYear();
- if(dd<10){
-     dd='0'+dd
- }
- if(mm<10){
-     mm='0'+mm
- }
- var today = mm+'-'+dd+'-'+yyyy;
- return today;
-}
-
-function saveFile(){
-  var content = editor.exportFile();
-  var tr = document.getElementById("title").value,
-      tg = document.getElementById("tags").value,
-      tags = tg.split(',');
-
-
-  var desc = {
-    title: tr,
-    tags: tags,
-    date: getFormattedDate()
-  };
-
-  console.log(content);
-
-  if(desc.title && desc.tags) {
-    socket.emit("save", desc, content);
-  } else {
-    alert("No content to save");
   }
-}
 
-var saveButton = document.getElementById("save");
-
-saveButton.addEventListener("click", saveFile);
+  var editor = new EpicEditor(opts).load();
+  editor.on("load", editor.enterFullscreen());
+  editor.on("load", checkFile);
   </script>
+
 </body>
 </html>

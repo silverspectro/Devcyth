@@ -93,10 +93,17 @@ API.prototype.get = function(item, attribute) {
 
 API.prototype.writePost = function(desc, file) {
   var postsFile = __dirname + "/_posts/" + desc.title + ".md";
-  console.log(desc);
+  //console.log(desc);
   fs.writeFile(postsFile, "{{" + JSON.stringify(desc) + "}}" + "\n" + file, "utf8", function(err){
     if(err)throw err;
   });
+}
+
+API.prototype.deletePost = function(title) {
+  var postFile = __dirname + "/_posts/" + title + ".md";
+  //fs remove file
+  console.log(postFile);
+  //fs.rmFile(postFile);
 }
 
 API.prototype.addItem = function(item) {

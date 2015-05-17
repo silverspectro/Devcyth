@@ -779,8 +779,8 @@
 
         // Setup the containing element CSS for fullscreen
         _elementStates.element = _saveStyleState(self.element, 'save', {
-          'position': 'fixed'
-        , 'top': '85'
+          'position': 'static'
+        , 'top': '0'
         , 'left': '0'
         , 'width': '100%'
         , 'z-index': '9999' // Most browsers
@@ -865,7 +865,7 @@
 
       self.emit('fullscreenexit');
 
-      callback.call(self);
+      callback.call(self);Title
     };
 
     // This setups up live previews by triggering preview() IF in fullscreen on keyup
@@ -2802,7 +2802,7 @@ function Parser(options) {
 }
 
 /**
- * Static Parse Method
+ * Static Parse MethodTitle
  */
 
 Parser.parse = function(src, options, renderer) {

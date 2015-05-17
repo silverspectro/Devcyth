@@ -90,6 +90,11 @@ io.on('connection', function(socket){
     //socket.emit("refresh");
   });
 
+  socket.on("deletePost", function(title){
+    api.deletePost(title);
+    //socket.emit("refresh");
+  });
+
 });
 
 /**

@@ -73,14 +73,13 @@ body {
 #epiceditor-preview blockquote {
     padding: 13px 13px 21px 15px;
     margin-bottom: 18px;
-    font-family:georgia,serif;
     font-style: italic;
 }
 #epiceditor-preview blockquote:before {
     content:"\201C";
     font-size:40px;
     margin-left:-10px;
-    font-family:georgia,serif;
+    font-family:'IM Fell English', serif;
     color:#eee;
 }
 #epiceditor-preview blockquote p {
@@ -118,4 +117,8 @@ body {
     background-color: rgb(41,41,41);
     font-size: 11px;
     padding: 0;
+}
+#epiceditor-preview p,
+#epiceditor-preview blockquote {
+  font-family: 'IM Fell English', serif;
 }

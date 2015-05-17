@@ -66,9 +66,17 @@ function removeClass(ele,cls) {
 
 var socket = io();
 
+var saveButton = document.getElementById("save");
+
+
+if(saveButton)saveButton.addEventListener("click", saveFile);
+
 var posts = document.getElementsByClassName("post");
+var del_post = document.getElementsByClassName("delete-post");
+var utilities = document.getElementsByTagName("header")[0];
 var closePosts = document.getElementsByClassName("close-post");
 var postOffTop, postOffLeft;
+var open = false;
 
 function focusPost(posts, closeBtn, event) {
 
@@ -76,56 +84,63 @@ function focusPost(posts, closeBtn, event) {
   var item = this;
   var d = 0;
   var viewportOffset = this.getBoundingClientRect();
-  // these are relative to the viewport
-  postOffTop = viewportOffset.top + 5;
-  postOffLeft = viewportOffset.left + 5;
+  if(!open) {
+    // these are relative to the viewport
+    postOffTop = viewportOffset.top + 5;
+    postOffLeft = viewportOffset.left + 5;
 
-  document.body.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
 
-  function setTop() {
-    this.style.top = 0 + "px";
-  }
+    function setTop() {
+      this.style.top = 0 + "px";
+    }
 
-  function whichChild(elem){
-    var  i= 0;
-    while((elem=elem.previousSibling)!=null) ++i;
-    return i;
-  }
+    function whichChild(elem){
+      var  i= 0;
+      while((elem=elem.previousSibling)!=null) ++i;
+      return i;
+    }
 
-  function focusIn() {
-    for(var el = 0; el < childs.length; el++) {
-      if(childs[el].childNodes) {
-        removeClass(childs[el], "leaveTop");
-        removeClass(childs[el], "appearTop");
-        if(/preview/.test(childs[el].className))childs[el].style.display = "none";
-        if(/content/.test(childs[el].className))childs[el].style.display = "block";
-        childs[el].style.animationDelay = 0+"."+d+ "s";
-        childs[el].style.WebkitAnimationDelay = 0+"."+d+ "s";
-        addClass(childs[el], "appearTop");
-        d = d + 2;
+    function focusIn() {
+      for(var el = 0; el < childs.length; el++) {
+        if(childs[el].childNodes) {
+          removeClass(childs[el], "leaveTop");
+          removeClass(childs[el], "appearTop");
+          if(/preview/.test(childs[el].className))childs[el].style.display = "none";
+          if(/content/.test(childs[el].className))childs[el].style.display = "block";
+          childs[el].style.animationDelay = 0+"."+d+ "s";
+          childs[el].style.WebkitAnimationDelay = 0+"."+d+ "s";
+          if(/content/.test(childs[el].className)) {
+            addClass(childs[el], "appearLeft");
+          } else {
+            addClass(childs[el], "appearTop");
+          }
+          d = d + 2;
+        }
       }
     }
-  }
 
-  //to get item.api (useless for the moment)
-  function get(item) {
-    socket.emit("get", whichChild(item), "content");
-  };
+    //to get item.api (useless for the moment)
+    function get(item) {
+      socket.emit("get", whichChild(item), "content");
+    };
 
-  window.setTimeout(setTop.bind(this), 750);
-  window.setTimeout(focusIn.bind(this), 1500);
-  this.style.top = postOffTop + "px";
-  this.style.left = postOffLeft + "px";
-
-
-  this.className = "focus_post";
+    window.setTimeout(setTop.bind(this), 750);
+    window.setTimeout(focusIn.bind(this), 1500);
+    this.style.top = postOffTop + "px";
+    this.style.left = postOffLeft + "px";
 
 
-  for(var el = 0; el < childs.length; el++) {
-    if(childs[el].childNodes) {
-      addClass(childs[el], "leaveTop");
+    this.className = "focus_post";
+
+
+    for(var el = 0; el < childs.length; el++) {
+      if(childs[el].childNodes) {
+        addClass(childs[el], "leaveTop");
+      }
     }
-  }
+    }
+  open = true;
 }
 
 function closePost(post, event) {
@@ -171,13 +186,33 @@ function closePost(post, event) {
       addClass(childs[el], "leaveTop");
     }
   }
+  open = false;
+}
+
+function deletePost(post, event) {
+  if (event.stopPropagation) {
+    event.stopPropagation();
+  }
+  event.cancelBubble = true;
+  event.preventDefault();
+
+  var title = post.getElementsByTagName("h3")[0].innerHTML;
+
+  socket.emit("deletePost", title);
 
 }
+
+function extendUtils() {
+  console.log(this);
+}
+
+if(utilities)utilities.addEventListener("click", extendUtils.bind(utilities));
 
 if(posts.length > 1) {
   for(post in posts){
       if(!isNaN(parseInt(post))) { 
         posts[post].addEventListener("click", focusPost.bind(posts[post], posts, closePosts[post]));
+        del_post[post].addEventListener("click", deletePost.bind(del_post[post], posts[post]));
     }
   }
 }
@@ -188,4 +223,50 @@ if(closePosts.length > 1) {
       closePosts[btn].addEventListener("click", closePost.bind(closePosts[btn], posts[btn]));
     }
   }
+}
+
+// Editor
+
+function checkFile(){
+var files = editor.getFiles();
+for (x in files) {
+  console.log('File: ' + x); //Returns the name of each file
+};
+}
+
+function getFormattedDate() {
+var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0!
+
+var yyyy = today.getFullYear();
+if(dd<10){
+   dd='0'+dd
+}
+if(mm<10){
+   mm='0'+mm
+}
+var today = mm+'-'+dd+'-'+yyyy;
+return today;
+}
+
+function saveFile(){
+var content = editor.exportFile();
+var tr = document.getElementById("title").value,
+    tg = document.getElementById("tags").value,
+    tags = tg.split(',');
+
+
+var desc = {
+  title: tr,
+  tags: tags,
+  date: getFormattedDate()
+};
+
+
+if(desc.title && desc.tags) {
+  socket.emit("save", desc, content);
+} else {
+  alert("No content to save");
+}
 }
