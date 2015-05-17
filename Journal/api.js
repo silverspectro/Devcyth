@@ -103,7 +103,9 @@ API.prototype.deletePost = function(title) {
   var postFile = __dirname + "/_posts/" + title + ".md";
   //fs remove file
   console.log(postFile);
-  //fs.rmFile(postFile);
+  fs.unlink(postFile, function(){
+    console.log("removed "+ postFile);
+  });
 }
 
 API.prototype.addItem = function(item) {

@@ -82,17 +82,14 @@ io.on('connection', function(socket){
 
   socket.on("save", function(desc, file){
     api.writePost(desc, file);
-    //socket.emit("refresh");
   });
 
   socket.on("get", function(item, attribute){
     console.log(api.get(item, attribute));
-    //socket.emit("refresh");
   });
 
   socket.on("deletePost", function(title){
     api.deletePost(title);
-    //socket.emit("refresh");
   });
 
 });

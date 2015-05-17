@@ -67,10 +67,6 @@ function removeClass(ele,cls) {
 var socket = io();
 
 var saveButton = document.getElementById("save");
-
-
-if(saveButton)saveButton.addEventListener("click", saveFile);
-
 var posts = document.getElementsByClassName("post");
 var del_post = document.getElementsByClassName("delete-post");
 var utilities = document.getElementsByTagName("header")[0];
@@ -206,24 +202,43 @@ function extendUtils() {
   console.log(this);
 }
 
+if(saveButton)saveButton.addEventListener("click", saveFile);
+
 if(utilities)utilities.addEventListener("click", extendUtils.bind(utilities));
 
-if(posts.length > 1) {
+if(posts.length > 0) {
   for(post in posts){
       if(!isNaN(parseInt(post))) { 
         posts[post].addEventListener("click", focusPost.bind(posts[post], posts, closePosts[post]));
-        del_post[post].addEventListener("click", deletePost.bind(del_post[post], posts[post]));
+        if(del_post[post])del_post[post].addEventListener("click", deletePost.bind(del_post[post], posts[post]));
     }
   }
 }
 
-if(closePosts.length > 1) {
+if(closePosts.length > 0) {
   for(btn in closePosts){
     if(!isNaN(parseInt(btn))) { 
       closePosts[btn].addEventListener("click", closePost.bind(closePosts[btn], posts[btn]));
     }
   }
 }
+
+function appearPosts() {
+  var d = 0;
+  if(posts.length > 0) {
+    for(post in posts){
+        if(!isNaN(parseInt(post))) { 
+          posts[post].style.transitionDelay = 0+"."+d+ "s";
+          posts[post].style.WebkitTransitionDelay = 0+"."+d+ "s";
+          posts[post].style.transform = "scale(1)";
+          posts[post].style.WebkitTransform = "scale(1)";
+          d = d + 2;
+      }
+    }
+  }
+}
+
+window.addEventListener("load", appearPosts);
 
 // Editor
 
@@ -235,38 +250,49 @@ for (x in files) {
 }
 
 function getFormattedDate() {
-var today = new Date();
-var dd = today.getDate();
-var mm = today.getMonth()+1; //January is 0!
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
 
-var yyyy = today.getFullYear();
-if(dd<10){
-   dd='0'+dd
-}
-if(mm<10){
-   mm='0'+mm
-}
-var today = mm+'-'+dd+'-'+yyyy;
-return today;
+  var yyyy = today.getFullYear();
+  if(dd<10){
+     dd='0'+dd
+  }
+  if(mm<10){
+     mm='0'+mm
+  }
+  var today = mm+'-'+dd+'-'+yyyy;
+  return today;
 }
 
 function saveFile(){
-var content = editor.exportFile();
-var tr = document.getElementById("title").value,
-    tg = document.getElementById("tags").value,
-    tags = tg.split(',');
+  var content = editor.exportFile();
+  var iframe = document.getElementsByTagName("iframe")[0];
+  var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+  var previewFrame = innerDoc.getElementById("epiceditor-previewer-frame");
+  var previewDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+  var tr = document.getElementById("title").value,
+      description = document.getElementById("description").value
+      tg = document.getElementById("tags").value,
+      cover = previewDoc.getElementsByTagName("img")[0],
+      tags = tg.split(',');
 
 
-var desc = {
-  title: tr,
-  tags: tags,
-  date: getFormattedDate()
+  var currentPost = {
+    title: tr,
+    tags: tags,
+    date: getFormattedDate()
 };
 
-
-if(desc.title && desc.tags) {
-  socket.emit("save", desc, content);
-} else {
-  alert("No content to save");
+if(description)currentPost.description = description;
+if(cover) {
+  currentPost.cover = cover.src;
 }
+
+
+if(currentPost.title && currentPost.tags) {
+    socket.emit("save", currentPost, content);
+  } else {
+    alert("No content to save");
+  }
 }

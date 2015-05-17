@@ -1,6 +1,7 @@
 html { padding:0 10px; }
 
 body {
+  width: 100%;
   margin:0;
   padding:10px 0;
   background:#fff;
@@ -121,4 +122,46 @@ body {
 #epiceditor-preview p,
 #epiceditor-preview blockquote {
   font-family: 'IM Fell English', serif;
+}
+
+#epiceditor-preview .clear {
+  clear: both;
+}
+
+#epiceditor-preview .banner {
+  display:block;
+  width: 100%;
+  height: 150px;
+  margin: 0.3em 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#epiceditor-preview img {
+  display:block;
+  max-width: 30%;
+  margin: 0 auto;
+}
+
+#epiceditor-preview img.small {
+  max-width: 10%;
+}
+
+#epiceditor-preview img.medium {
+  max-width: 50%;
+}
+
+#epiceditor-preview img.big {
+  max-width: 100%;
+}
+
+#epiceditor-preview img.left {
+  float: left;
+  margin-right: 1.3em;
+}
+
+#epiceditor-preview img.right {
+  float: left;
+  margin-left: 1.3em;
 }

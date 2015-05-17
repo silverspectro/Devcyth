@@ -8,8 +8,10 @@ var express = require('express'),
     session = require("express-session"),
     passport = require("passport"),
     localStrategy = require("passport-local");
+    multer  = require('multer'),
+    done = false,
     API = require("./api");
-    api = new API("user");
+    api = new API("user","media");
 
 var routes = require('./routes/index');
 
@@ -21,13 +23,6 @@ var poet = Poet(app, {
   postsPerPage: 5,
   metaFormat: 'json'
 });
-
-poet.watch(function(){
-  //watcher reloaded
-}).init().then(function(){
-  //ready
-});
-
 
 function findById(id, fn) {
   var users = api.items.user;
@@ -105,12 +100,31 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(multer({ dest: './public/images',
+ rename: function (fieldname, filename) {
+    return filename+Date.now();
+  },
+onFileUploadStart: function (file) {
+  console.log(file.originalname + ' is starting ...')
+},
+onFileUploadComplete: function (file) {
+  console.log(file.fieldname + ' uploaded to  ' + file.path)
+  done=true;
+}
+}));
 app.use(function(req,res,next){
   api.start();
   res.locals.items = api.items;
-
-  next();
+  if (req.isAuthenticated() || req.url != "/page" || req.url != "/tags" || req.url != "/" || req.url == "/login") { return next(); }
+  res.redirect('/login');
 });
+
+poet.watch(function(){
+  //watcher reloaded
+}).init().then(function(){
+  //init
+});
+
 
 app.use('/', routes);
 
@@ -120,6 +134,14 @@ app.get("/editor", ensureAuthenticated, function(req, res, next){
 
 app.get('/admin', ensureAuthenticated, function(req, res){
   res.render('index', { user: req.user });
+});
+
+app.post('/api/photo',function(req,res){
+  if(done==true){
+    req.files.userPhoto.type = "media";
+    api.addItem(req.files.userPhoto);
+    res.redirect("/editor");
+  }
 });
 
 app.get('/login', function(req, res){

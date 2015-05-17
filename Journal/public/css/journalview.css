@@ -421,16 +421,28 @@ hr {
     border-bottom: 1px solid #ccc;
 }
 blockquote {
+		position: relative;
     padding: 13px 13px 21px 15px;
     margin-bottom: 18px;
     font-style: italic;
 }
 blockquote:before {
+		position: absolute;
+		top: -8px;
     content:"\201C";
     font-size:40px;
-    margin-left:-10px;
+    margin-left:-25px;
     font-family:'IM Fell English', serif;
     color:#eee;
+}
+blockquote:after {
+	position: absolute;
+	top: -8px;
+	content:"\201D";
+	font-size:40px;
+	margin-left:0px;
+	font-family:'IM Fell English', serif;
+	color:#eee;
 }
 blockquote p {
     font-size: 14px;
@@ -497,9 +509,9 @@ blockquote {
 	border: 1.5px solid #2CC7A3; /* red : #C72C50 */;
 	background-color: #fff;
 	overflow: hidden;
-	-ms-transform: scale(1);
-	    transform: scale(1);
-	-webkit-transform: scale(1);
+	-ms-transform: scale(0);
+	    transform: scale(0);
+	-webkit-transform: scale(0);
 	transition: all 0.3s;
 	-webkit-transition: all 0.3s;
 }
@@ -609,7 +621,7 @@ ul.tags, ul.tags a {
 	-webkit-transition: background-color 0.3s;
 }
 
-.post ul.tags li:hover {
+ul.tags li:hover {
 	background-color: #C2F0E1;
 }
 
@@ -627,8 +639,51 @@ ul.tags, ul.tags a {
 
 .content {
 	text-align: left;
-	margin: 0.7em;
+	max-width: 960px;
+	margin: 0.7em auto;
 	display: none;
+}
+
+.content .clear {
+  clear: both;
+}
+
+.content .banner {
+  display:block;
+  width: 100%;
+  height: 150px;
+	margin: 0.3em 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.content img {
+  display:block;
+  max-width: 30%;
+  margin: 0 auto;
+}
+
+.content img.small {
+  max-width: 10%;
+}
+
+.content img.medium {
+  max-width: 50%;
+}
+
+.content img.big {
+  max-width: 100%;
+}
+
+.content img.left {
+  float: left;
+  margin-right: 1.3em;
+}
+
+.content img.right {
+  float: left;
+  margin-left: 1.3em;
 }
 
 .focus_post .content h1,
@@ -648,6 +703,7 @@ ul.tags, ul.tags a {
 	-webkit-margin-start: 0px;
 	-webkit-margin-end: 0px;
 	color: #879491;
+	margin-top: 0.5em;
 	font-size: 1.3em;
 	font-style: italic;
 	text-align: center;
@@ -735,6 +791,11 @@ ul.tags, ul.tags a {
 	margin:0px;
 	padding-top: 0.25em;
 	vertical-align: middle;
+}
+
+.pagination li {
+	display:inline-block;
+	margin-left: 0.3em;
 }
 
 .appearLeft {

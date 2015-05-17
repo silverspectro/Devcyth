@@ -1,24 +1,46 @@
-div.post
-  if(user)
-    div.delete-post
+if(post.cover)
+  div.post(style="background-image:url(" + post.cover + ")")
+    if(user)
+      div.delete-post
+        p X
+    div.close-post
       p X
-    div.edit-post
-      p edit
-  div.close-post
-    p X
-  h3
-   = post.title
-  span.date #{post.date.getMonth()+1}.#{post.date.getDate()}.#{post.date.getFullYear()}
-  ul.tags
-    - each tag in post.tags
-      li
-        a(href=tagUrl(tag))
-          = tag
-  if(post.description)
-    blockquote
-      = post.description
-  else
-    .preview
-      != post.preview
-  .content
-    != post.content
+    h3
+     = post.title
+    span.date #{post.date.getMonth()+1}.#{post.date.getDate()}.#{post.date.getFullYear()}
+    ul.tags
+      - each tag in post.tags
+        li
+          a(href=tagUrl(tag))
+            = tag
+    if(post.description)
+      blockquote
+        = post.description
+    else
+      .preview
+        != post.preview
+    .content
+      != post.content
+else
+  div.post
+    if(user)
+      div.delete-post
+        p X
+    div.close-post
+      p X
+    h3
+     = post.title
+    span.date #{post.date.getMonth()+1}.#{post.date.getDate()}.#{post.date.getFullYear()}
+    ul.tags
+      - each tag in post.tags
+        li
+          a(href=tagUrl(tag))
+            = tag
+    if(post.description)
+      blockquote
+        = post.description
+    else
+      .preview
+        != post.preview
+    .content
+      != post.content

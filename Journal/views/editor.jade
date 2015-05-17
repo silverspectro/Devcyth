@@ -7,7 +7,7 @@ body
   .navbar.navbar-fixed-top
     .navbar-inner
       .container
-        a.brand(href='/') Poet Demos
+        a.brand(href='/') Journal
         if(user)
             p(style="float:right;color:#fff")= user.username
             a(href="/editor", style="float:right") editor
@@ -16,3 +16,7 @@ body
          a(href="/login", style="float:right") login
 
 include editor.html
+- console.log(items.media)
+script.
+  var media = !{JSON.stringify(items.media)}
+  console.log(media);
